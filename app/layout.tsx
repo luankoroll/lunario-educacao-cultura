@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Cormorant_Garamond } from "next/font/google";
+import { SiteFooter } from "./components/SiteFooter";
+import { SiteHeader } from "./components/SiteHeader";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -22,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const protocol =
     forwardedProtocol ?? (host?.includes("localhost") ? "http" : "https");
   const origin = host ? `${protocol}://${host}` : "http://localhost:3000";
-  const socialImage = `${origin}/og.png`;
+  const socialImage = `${origin}/lunario-social-2026.png`;
 
   return {
     title,
@@ -32,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       type: "website",
       locale: "pt_BR",
-      images: [{ url: socialImage, width: 1732, height: 908, alt: title }],
+      images: [{ url: socialImage, width: 1672, height: 941, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -50,7 +52,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={cormorant.variable}>{children}</body>
+      <body className={cormorant.variable}>
+        <a className="skip-link" href="#conteudo">
+          Pular para o conteúdo
+        </a>
+        <SiteHeader />
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   );
 }

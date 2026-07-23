@@ -1,3 +1,5 @@
+import { ActionLink } from "./ActionLink";
+
 export function EventCard() {
   return (
     <article
@@ -24,28 +26,13 @@ export function EventCard() {
         </div>
       </div>
 
-      <details className="event-card__details">
-        <summary
-          className="event-card__button"
-          aria-label="Mais informações sobre a 2ª Bienal Internacional do Livro de Jaraguá do Sul"
-        >
+      <ActionLink
+        className="event-card__button"
+        href="/eventos/bienal-internacional-do-livro-2026"
+        variant="outline"
+      >
           Mais informações
-          <span aria-hidden="true">+</span>
-        </summary>
-        <div className="event-card__more">
-          <p>2ª Bienal Internacional do Livro</p>
-          <dl>
-            <div>
-              <dt>Cidade</dt>
-              <dd>Jaraguá do Sul</dd>
-            </div>
-            <div>
-              <dt>Data</dt>
-              <dd>08 de agosto de 2026</dd>
-            </div>
-          </dl>
-        </div>
-      </details>
+      </ActionLink>
     </article>
   );
 }

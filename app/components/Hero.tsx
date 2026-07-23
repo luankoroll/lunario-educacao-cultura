@@ -1,14 +1,9 @@
-import { Brand } from "./Brand";
 import { EventCard } from "./EventCard";
 
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero__frame">
-        <header className="hero__header">
-          <Brand />
-        </header>
-
         <div className="hero__content">
           <EventCard />
 
