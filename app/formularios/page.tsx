@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import { InfoCard, PageIntro } from "../components/InternalPage";
 import { formCards } from "../lib/content";
+
+export const metadata: Metadata = {
+  title: "Formulários",
+  description:
+    "Inscrições, manifestações de interesse, contatos e propostas para atividades do Lunário.",
+  alternates: { canonical: "/formularios" },
+};
 
 export default function FormulariosPage() {
   return (

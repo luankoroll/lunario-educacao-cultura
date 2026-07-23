@@ -1,98 +1,117 @@
-# vinext-starter
+# Lunário — Educação e Cultura
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Portal editorial, educacional e cultural do Lunário. O projeto usa Next.js App
+Router com React e é compilado pelo vinext/Vite como exportação estática para o
+Cloudflare Pages.
 
-## Prerequisites
+## Requisitos
 
-- Node.js `>=22.13.0`
+- Node.js `22.16.0`
+- npm `10` ou superior
 
-## Quick Start
+O projeto fixa a versão recomendada em `.node-version` e `.nvmrc`.
+
+## Instalação e desenvolvimento
 
 ```bash
-npm install
+npm ci
+cp .env.example .env.local
 npm run dev
+```
+
+No Windows PowerShell, copie o ambiente com:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+## Variáveis de ambiente
+
+| Variável | Obrigatória | Uso |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Não | URL pública usada em metadados, sitemap e robots. O valor padrão é `https://lunario-educacao-cultura.pages.dev`. |
+
+O Cloudflare Pages também fornece `CF_PAGES_URL` automaticamente. O projeto não
+usa banco de dados, chaves privadas ou segredos de aplicação.
+
+## Comandos
+
+```bash
+npm run dev          # ambiente local
+npm run typecheck    # validação de tipos
+npm run lint         # análise estática
+npm run build        # build de produção
+npm test             # testa a saída já gerada
+npm run check        # executa toda a validação, incluindo o build
+npm run deploy:pages # publicação direta com Wrangler
+```
+
+O build de produção é:
+
+```bash
 npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+A pasta publicada é:
 
-## Included Shape
-
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```text
+dist/client
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+## Rotas estáticas
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+`next.config.ts` usa `output: "export"` e `trailingSlash: true`. As rotas
+dinâmicas possuem `generateStaticParams`, portanto cada página é gerada como
+`<rota>/index.html` e funciona quando aberta diretamente. A página 404 é
+exportada como `dist/client/404.html`; não é necessário usar fallback de SPA.
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+## Cloudflare Pages
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+Crie o projeto no painel com estes valores:
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+| Campo | Valor |
+| --- | --- |
+| Framework preset | `None` |
+| Production branch | `main` |
+| Root directory | `/` ou vazio |
+| Build command | `npm run build` |
+| Build output directory | `dist/client` |
+| Variável de build | `NODE_VERSION=22.16.0` |
+| Variável opcional | `NEXT_PUBLIC_SITE_URL=https://lunario-educacao-cultura.pages.dev` |
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+O arquivo `wrangler.toml` contém a mesma pasta de saída. Para uma publicação
+direta:
 
-## Useful Commands
+```bash
+npx wrangler login
+npx wrangler pages project create lunario-educacao-cultura --production-branch main
+npm run build
+npm run deploy:pages
+```
 
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+## GitHub
 
-## Learn More
+Depois de criar um repositório público vazio:
 
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+```bash
+git init
+git branch -M main
+git add .
+git commit -m "Prepare Lunário for production"
+git remote add origin https://github.com/SEU-USUARIO/lunario-educacao-cultura.git
+git push -u origin main
+```
+
+Para vincular pelo painel do Cloudflare Pages, selecione o repositório, mantenha
+a branch `main` e use a configuração da tabela acima.
+
+## Arquivos de publicação
+
+- `public/robots.txt`: regras para rastreadores
+- `public/sitemap.xml`: índice das 31 rotas públicas
+- `app/not-found.tsx`: página 404
+- `public/_headers`: cabeçalhos de segurança e cache
+- `public/favicon.ico`, `public/favicon-32.png` e
+  `public/apple-touch-icon.png`: ícones
+- `public/lunario-social-2026.jpg`: imagem Open Graph
+- `.env.example`: exemplo sem segredos

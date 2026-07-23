@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import { ActionLink } from "../../components/ActionLink";
 import { PageIntro } from "../../components/InternalPage";
 import { courseItems } from "../../lib/content";
+import { notFound } from "next/navigation";
 
 type CoursePageProps = {
   params: Promise<{ slug: string }>;
@@ -78,22 +80,29 @@ export function generateStaticParams() {
   return courseItems.map((course) => ({ slug: course.slug }));
 }
 
+export const dynamicParams = false;
+
+export async function generateMetadata({
+  params,
+}: CoursePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const course = courseItems.find((item) => item.slug === slug);
+
+  return course
+    ? {
+        title: course.title,
+        description: course.description,
+        alternates: { canonical: `/cursos/${course.slug}` },
+      }
+    : {};
+}
+
 export default async function CoursePage({ params }: CoursePageProps) {
   const { slug } = await params;
   const course = courseItems.find((item) => item.slug === slug);
 
   if (!course) {
-    return (
-      <main id="conteudo" className="internal-page">
-        <PageIntro
-          eyebrow="Cursos"
-          title="Curso não encontrado"
-          intro="O curso informado não está disponível. Consulte a página de cursos para conhecer os percursos formativos atuais."
-          backHref="/cursos"
-          backLabel="Ver todos os cursos"
-        />
-      </main>
-    );
+    notFound();
   }
 
   const details = courseDetails[course.slug] ?? {

@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import { ActionLink } from "../../components/ActionLink";
 import { EditableForm } from "../../components/EditableForm";
 import { PageIntro } from "../../components/InternalPage";
+
+export const metadata: Metadata = {
+  title: "Contato e propostas",
+  description:
+    "Envie mensagens, convites, propostas de parceria e solicitações profissionais ao Lunário.",
+  alternates: { canonical: "/formularios/contato" },
+};
 
 export default function ContatoPage() {
   return (

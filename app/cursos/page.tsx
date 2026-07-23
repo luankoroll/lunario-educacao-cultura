@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   FilterableCollection,
   type ExplorerItem,
@@ -17,6 +18,13 @@ const items: ExplorerItem[] = courseItems.map((course) => ({
     status: course.status,
   },
 }));
+
+export const metadata: Metadata = {
+  title: "Cursos",
+  description:
+    "Cursos, oficinas e percursos formativos de leitura, escrita, literatura, ensino e produção cultural.",
+  alternates: { canonical: "/cursos" },
+};
 
 export default function CoursesPage() {
   return (

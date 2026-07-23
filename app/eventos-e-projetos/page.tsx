@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { InfoCard, PageIntro } from "@/app/components/InternalPage";
 import { eventItems } from "@/app/lib/content";
 
@@ -8,6 +9,13 @@ const upcomingEvents = eventItems
 const projects = eventItems.filter((item) =>
   item.href.startsWith("/projetos/"),
 );
+
+export const metadata: Metadata = {
+  title: "Eventos e projetos",
+  description:
+    "Agenda de encontros, saraus, projetos educacionais, ações culturais e atividades literárias.",
+  alternates: { canonical: "/eventos-e-projetos" },
+};
 
 export default function EventsAndProjectsPage() {
   return (

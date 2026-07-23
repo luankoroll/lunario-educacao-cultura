@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import { ActionLink } from "../../components/ActionLink";
 import { EditableForm } from "../../components/EditableForm";
 import { PageIntro } from "../../components/InternalPage";
+
+export const metadata: Metadata = {
+  title: "Participação em eventos",
+  description:
+    "Formulário provisório para participação em eventos e projetos culturais do Lunário.",
+  alternates: { canonical: "/formularios/participacao-em-eventos" },
+};
 
 export default function ParticipacaoEmEventosPage() {
   return (

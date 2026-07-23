@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ActionLink } from "@/app/components/ActionLink";
 import { PageIntro } from "@/app/components/InternalPage";
 import { eventItems } from "@/app/lib/content";
@@ -6,35 +8,53 @@ type EventPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-function titleFromSlug(slug: string) {
-  return decodeURIComponent(slug)
-    .split("-")
-    .filter(Boolean)
-    .map((word) => word.charAt(0).toLocaleUpperCase("pt-BR") + word.slice(1))
-    .join(" ");
+const eventPages = eventItems.filter((item) =>
+  item.href.startsWith("/eventos/"),
+);
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return eventPages.map((item) => ({
+    slug: item.href.replace("/eventos/", ""),
+  }));
+}
+
+export async function generateMetadata({
+  params,
+}: EventPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const item = eventPages.find(
+    (event) => event.href === `/eventos/${slug}`,
+  );
+
+  return item
+    ? {
+        title: item.title,
+        description: item.description,
+        alternates: { canonical: item.href },
+      }
+    : {};
 }
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params;
   const isBookFair = slug === "bienal-internacional-do-livro-2026";
-  const listedEvent = eventItems.find(
+  const listedEvent = eventPages.find(
     (item) => item.href === `/eventos/${slug}`,
   );
 
+  if (!listedEvent) {
+    notFound();
+  }
+
   const event = {
-    title:
-      listedEvent?.title ??
-      (isBookFair
-        ? "2ª Bienal Internacional do Livro de Jaraguá do Sul"
-        : titleFromSlug(slug)),
-    type: listedEvent?.type ?? "Evento cultural",
-    date: isBookFair ? "08/08/2026" : (listedEvent?.period ?? "Data editável"),
+    title: listedEvent.title,
+    type: listedEvent.type,
+    date: isBookFair ? "08/08/2026" : listedEvent.period,
     dateTime: isBookFair ? "2026-08-08" : undefined,
-    location:
-      listedEvent?.location ?? "Local em definição — informação editável",
-    description:
-      listedEvent?.description ??
-      "Página provisória preparada para receber a apresentação completa deste evento.",
+    location: listedEvent.location,
+    description: listedEvent.description,
   };
 
   return (

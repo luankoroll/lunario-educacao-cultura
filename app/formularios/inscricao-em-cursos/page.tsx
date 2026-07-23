@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import { ActionLink } from "../../components/ActionLink";
 import { EditableForm } from "../../components/EditableForm";
 import { PageIntro } from "../../components/InternalPage";
+
+export const metadata: Metadata = {
+  title: "Inscrição em cursos",
+  description:
+    "Formulário provisório de inscrição nos cursos e oficinas do Lunário.",
+  alternates: { canonical: "/formularios/inscricao-em-cursos" },
+};
 
 export default function InscricaoEmCursosPage() {
   return (

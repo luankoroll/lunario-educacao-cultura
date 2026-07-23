@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   FilterableCollection,
   type ExplorerItem,
@@ -14,31 +15,26 @@ const categories = [
   "Língua Portuguesa",
 ];
 
+export const metadata: Metadata = {
+  title: "Editorial",
+  description:
+    "Textos, ensaios, crônicas e reflexões sobre literatura, educação, cultura e linguagem.",
+  alternates: { canonical: "/editorial" },
+};
+
 const items: ExplorerItem[] = editorialItems.map((item) => ({
   eyebrow: item.category,
   title: item.title,
   description: item.summary,
   meta: [item.date],
-  href: `/editorial?texto=${item.slug}#texto`,
+  href: `/editorial/${item.slug}`,
   label: "Ler texto",
   attributes: {
     category: item.category,
   },
 }));
 
-type EditorialPageProps = {
-  searchParams: Promise<{ texto?: string | string[] }>;
-};
-
-export default async function EditorialPage({
-  searchParams,
-}: EditorialPageProps) {
-  const { texto } = await searchParams;
-  const selectedSlug = Array.isArray(texto) ? texto[0] : texto;
-  const selectedItem = editorialItems.find(
-    (item) => item.slug === selectedSlug,
-  );
-
+export default function EditorialPage() {
   return (
     <main id="conteudo" className="internal-page">
       <PageIntro
@@ -46,35 +42,6 @@ export default async function EditorialPage({
         title="Editorial"
         intro="Textos, ensaios, crônicas, materiais didáticos e reflexões sobre literatura, educação, cultura e linguagem."
       />
-
-      {selectedItem ? (
-        <section
-          className="internal-section internal-section--soft"
-          id="texto"
-          aria-labelledby="selected-editorial-title"
-        >
-          <div className="page-shell">
-            <article className="detail-panel detail-panel--wide prose">
-              <p className="eyebrow">
-                {selectedItem.category} · {selectedItem.date}
-              </p>
-              <h2 id="selected-editorial-title">{selectedItem.title}</h2>
-              <p className="lead">{selectedItem.summary}</p>
-              <p>
-                Este espaço está preparado para receber a íntegra do texto,
-                referências, imagens e informações de autoria. O conteúdo
-                editorial poderá ser atualizado sem alterar a estrutura da
-                página.
-              </p>
-              <p>
-                Nesta versão inicial, a apresentação funciona como uma leitura
-                demonstrativa e sinaliza com clareza onde o texto completo será
-                publicado.
-              </p>
-            </article>
-          </div>
-        </section>
-      ) : null}
 
       <section className="internal-section" aria-labelledby="editorial-list-title">
         <div className="page-shell">

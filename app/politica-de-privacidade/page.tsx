@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import { ActionLink } from "../components/ActionLink";
 import { PageIntro } from "../components/InternalPage";
+
+export const metadata: Metadata = {
+  title: "Política de privacidade",
+  description:
+    "Informações sobre o tratamento de dados nos formulários do Lunário.",
+  alternates: { canonical: "/politica-de-privacidade" },
+};
 
 export default function PoliticaDePrivacidadePage() {
   return (

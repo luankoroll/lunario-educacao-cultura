@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lunario-educacao-cultura.pages.dev/sitemap.xml
+Host: https://lunario-educacao-cultura.pages.dev

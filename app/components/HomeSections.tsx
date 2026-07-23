@@ -27,7 +27,7 @@ export function HomeSections() {
               title={item.title}
               description={item.summary}
               meta={[item.date]}
-              href={`/editorial?texto=${item.slug}#texto`}
+              href={`/editorial/${item.slug}`}
               label="Ler texto"
             />
           ))}
@@ -74,7 +74,7 @@ export function HomeSections() {
               title={publication.title}
               description={publication.description}
               meta={[publication.year, publication.source]}
-              href={`/producao-bibliografica?publicacao=${publication.slug}#publicacao`}
+              href={`/producao-bibliografica/${publication.slug}`}
               label="Ver publicação"
             >
               <div

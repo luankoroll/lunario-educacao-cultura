@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ActionLink } from "@/app/components/ActionLink";
 import { PageIntro } from "@/app/components/InternalPage";
 import { eventItems } from "@/app/lib/content";
@@ -6,27 +8,50 @@ type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-function titleFromSlug(slug: string) {
-  return decodeURIComponent(slug)
-    .split("-")
-    .filter(Boolean)
-    .map((word) => word.charAt(0).toLocaleUpperCase("pt-BR") + word.slice(1))
-    .join(" ");
+const projectPages = eventItems.filter((item) =>
+  item.href.startsWith("/projetos/"),
+);
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return projectPages.map((item) => ({
+    slug: item.href.replace("/projetos/", ""),
+  }));
+}
+
+export async function generateMetadata({
+  params,
+}: ProjectPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const item = projectPages.find(
+    (project) => project.href === `/projetos/${slug}`,
+  );
+
+  return item
+    ? {
+        title: item.title,
+        description: item.description,
+        alternates: { canonical: item.href },
+      }
+    : {};
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const listedProject = eventItems.find(
+  const listedProject = projectPages.find(
     (item) => item.href === `/projetos/${slug}`,
   );
-  const title = listedProject?.title ?? titleFromSlug(slug);
-  const type = listedProject?.type ?? "Projeto cultural";
-  const period = listedProject?.period ?? "Período editável";
-  const location =
-    listedProject?.location ?? "Local em definição — informação editável";
-  const description =
-    listedProject?.description ??
-    "Página provisória preparada para receber objetivos, histórico, equipe e registros deste projeto.";
+
+  if (!listedProject) {
+    notFound();
+  }
+
+  const title = listedProject.title;
+  const type = listedProject.type;
+  const period = listedProject.period;
+  const location = listedProject.location;
+  const description = listedProject.description;
 
   return (
     <main id="conteudo" className="internal-page">
