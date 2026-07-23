@@ -79,8 +79,7 @@ Crie o projeto no painel com estes valores:
 | Variável de build | `NODE_VERSION=22.16.0` |
 | Variável opcional | `NEXT_PUBLIC_SITE_URL=https://lunario-educacao-cultura.pages.dev` |
 
-O arquivo `wrangler.toml` contém a mesma pasta de saída. Para uma publicação
-direta:
+Para uma publicação direta pelo Wrangler:
 
 ```bash
 npx wrangler login

@@ -33,7 +33,7 @@ const localBindingConfig = {
     : [],
 };
 
-export default defineConfig(async () => {
+export default defineConfig(async ({ command }) => {
   // Keep Wrangler and Miniflare state project-local. These are non-secret tool
   // settings; application environment belongs in ignored `.env*` files.
   process.env.WRANGLER_WRITE_LOGS ??= "false";
@@ -42,6 +42,13 @@ export default defineConfig(async () => {
 
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
   const { cloudflare } = await import("@cloudflare/vite-plugin");
+  const cloudflareRuntimePlugins =
+    command === "serve"
+      ? cloudflare({
+          viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+          config: localBindingConfig,
+        })
+      : [];
 
   return {
     server: isCodexSeatbeltSandbox
@@ -50,10 +57,7 @@ export default defineConfig(async () => {
     plugins: [
       vinext(),
       sites(),
-      cloudflare({
-        viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-        config: localBindingConfig,
-      }),
+      ...cloudflareRuntimePlugins,
     ],
   };
 });
