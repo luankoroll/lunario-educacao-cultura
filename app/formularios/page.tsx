@@ -31,9 +31,8 @@ export default function FormulariosPage() {
               </h2>
             </div>
             <p>
-              Escolha o formulário adequado. Todas as estruturas desta versão
-              são provisórias e podem ser editadas antes da integração com um
-              serviço de recebimento.
+              Escolha o formulário adequado. A autoavaliação pedagógica possui
+              envio protegido; as demais estruturas ainda são provisórias.
             </p>
           </div>
 

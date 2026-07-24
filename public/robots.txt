@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/admin/
 
 Sitemap: https://lunario-educacao-cultura.pages.dev/sitemap.xml
 Host: https://lunario-educacao-cultura.pages.dev

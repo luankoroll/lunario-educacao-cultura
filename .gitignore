@@ -23,6 +23,11 @@
 .DS_Store
 Thumbs.db
 *.pem
+*.key
+*.p12
+*service-account*.json
+google-credentials*.json
+credentials*.json
 .idea/
 .vscode/
 
@@ -35,6 +40,7 @@ yarn-error.log*
 # env files
 .env*
 !.env.example
+.dev.vars*
 
 # vercel
 .vercel
@@ -44,6 +50,7 @@ next-env.d.ts
 *.tsbuildinfo
 /dist/
 /.wrangler/
+/_worker.bundle
 /outputs/
 /work/
 /.agents/

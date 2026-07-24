@@ -239,6 +239,13 @@ export const eventItems: EventItem[] = [
 
 export const formCards = [
   {
+    title: "Avaliação do caderno de Língua Portuguesa",
+    description:
+      "Autoavaliação do 6º ano 01 referente ao 2º trimestre de 2025.",
+    label: "Responder autoavaliação",
+    href: "/formularios/avaliacao-caderno-6-01",
+  },
+  {
     title: "Inscrição em cursos",
     description:
       "Formulário para inscrição nos cursos e oficinas disponíveis.",

@@ -1,0 +1,8 @@
+name = "lunario-educacao-cultura"
+pages_build_output_dir = "./dist/client"
+compatibility_date = "2026-07-23"
+
+[[d1_databases]]
+binding = "FORM_DB"
+database_name = "lunario-form-control"
+database_id = "aa67b050-7b83-4881-8877-cb34989e2065"
