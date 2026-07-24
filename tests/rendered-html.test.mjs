@@ -5,6 +5,9 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 const outputRoot = fileURLToPath(new URL("../dist/client/", import.meta.url));
+const serverEntry = fileURLToPath(
+  new URL("../dist/server/index.js", import.meta.url),
+);
 const siteUrl = "https://lunario-educacao-cultura.pages.dev";
 
 const routes = [
@@ -153,6 +156,13 @@ test("embeds admin HTML in the worker without public admin assets", async () => 
     worker,
     /admin-dashboard/i,
     "Dashboard HTML is missing from the worker",
+  );
+
+  const sitesWorker = await readFile(serverEntry, "utf8");
+  assert.equal(
+    sitesWorker,
+    worker,
+    "Sites must deploy the same authenticated advanced-mode Worker",
   );
 });
 

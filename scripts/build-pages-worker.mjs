@@ -1,6 +1,7 @@
 import { build } from "esbuild";
 import {
   access,
+  copyFile,
   mkdir,
   readFile,
   rm,
@@ -68,3 +69,11 @@ await rm(join(outputRoot, "_private"), { recursive: true, force: true });
 // not accepted by `wrangler pages deploy`. Pages uses the root wrangler.toml.
 await rm(join(outputRoot, "wrangler.json"), { force: true });
 await rm(join(".wrangler", "deploy", "config.json"), { force: true });
+
+// Sites expects the deployed Worker at dist/server/index.js. The same
+// self-contained advanced-mode Worker is valid there and keeps the authenticated
+// admin HTML out of the public asset tree for both hosting targets.
+await copyFile(
+  join(outputRoot, "_worker.js"),
+  join("dist", "server", "index.js"),
+);
