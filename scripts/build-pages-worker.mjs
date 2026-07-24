@@ -63,3 +63,8 @@ await build({
 // HTML is embedded in the Worker and never exists at a public asset URL.
 await rm(join(outputRoot, "admin"), { recursive: true, force: true });
 await rm(join(outputRoot, "_private"), { recursive: true, force: true });
+
+// The Cloudflare Vite plugin emits a Workers-oriented redirect config that is
+// not accepted by `wrangler pages deploy`. Pages uses the root wrangler.toml.
+await rm(join(outputRoot, "wrangler.json"), { force: true });
+await rm(join(".wrangler", "deploy", "config.json"), { force: true });
